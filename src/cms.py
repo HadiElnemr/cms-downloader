@@ -108,7 +108,7 @@ def get_files(course_url, username, password, session):
             r'[0-9]* - (.*)', "\\1", item.find("div").text)
         name = re.sub(
             r'[0-9]* - (.*)', "\\1", item.find("strong").text)
-        files.list.append(DownloadFile(name, url, discreption, week))
+        files.list.append(DownloadFile(name, url, discreption, week)) 
     return files
  
 def get_announcements(course_page_soup):

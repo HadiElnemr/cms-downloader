@@ -58,7 +58,7 @@ if __name__ == "__main__":
     home_page_soup = bs(home_page.text, 'html.parser')
 
     course_links = get_avaliable_courses(home_page_soup)
-    courses_name = get_course_names(home_page_soup)
+    courses_name = get_course_names(home_page_soup) 
     make_courses_dir(courses_name)
 
     if args.pdf or args.all:
@@ -77,20 +77,22 @@ if __name__ == "__main__":
             else:
                 download_files(files.list, username, password, pdf=True)
     else:
-        course_url, course = choose_course(courses_name, course_links)
-        if args.new:
-            print_announcement(course, username, password,
-                               course_url, session, console)
-            sys.exit(0)
-        files = get_files(course_url, username, password, session)
-        for item in files.list:
-            item.course = course
-        files.make_weeks()
-        if args.filter:
-            already_downloaded = get_downloaded_items(course)
-            filtered = filter_downloads(files, already_downloaded)
-            files_to_display = get_display_items(files, filtered)
-            files_to_download = choose_files(files_to_display)
-        else:
-            files_to_download = choose_files(files)
-        download_files(files_to_download.list, username, password)
+        while True :
+            course_url, course = choose_course(courses_name, course_links)
+            if args.new:
+                print_announcement(course, username, password,
+                                   course_url, session, console)
+                sys.exit(0)
+            files = get_files(course_url, username, password, session)
+            for item in files.list:
+                item.course = course
+            files.make_weeks()
+            if args.filter:
+                already_downloaded = get_downloaded_items(course)
+                filtered = filter_downloads(files, already_downloaded)
+                files_to_display = get_display_items(files, filtered)
+                files_to_download = choose_files(files_to_display)
+            else:
+                files_to_download = choose_files(files)
+            
+            download_files(files_to_download.list, username, password)
